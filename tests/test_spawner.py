@@ -855,29 +855,28 @@ _test_profiles = [
         'slug': 'training-python',
         'default': True,
         'profile_options': {
-            'image': {
-                'display_name': 'Image',
+            'cpu_limit': {
+                'display_name': 'CPU',
                 'unlisted_choice': {
-                    'enabled': True,
-                    'display_name': 'Image Location',
-                    'validation_regex': '^pangeo/.*$',
-                    'validation_message': 'Must be a pangeo image, matching ^pangeo/.*$',
-                    'kubespawner_override': {'image': '{value}'},
+                    'enabled': False,
                 },
                 'choices': {
-                    'pytorch': {
-                        'display_name': 'Python 3 Training Notebook',
-                        'kubespawner_override': {
-                            'image': 'pangeo/pytorch-notebook:master'
-                        },
-                    },
-                    'tf': {
-                        'display_name': 'R 4.2 Training Notebook',
+                    'one': {
+                        'display_name': '1 CPU',
                         'default': True,
-                        'kubespawner_override': {'image': 'training/r:label'},
+                        'kubespawner_override': {'cpu_limit': 1},
                     },
+                    'two':{
+                        'display_name': '2 CPUs',
+                        'kubespawner_override': {'cpu_limit': 2},
+                    }
                 },
             },
+        },
+        'kubespawner_override': {
+            'image': 'training/python:label',
+            'mem_limit': 512 * 1024 * 1024,
+            'environment': {'override': 'override-value'},
         },
     },
     {
@@ -1117,7 +1116,7 @@ async def test_default_profile():
     # nothing should be loaded yet
     assert spawner.cpu_limit is None
     await spawner.load_user_options()
-    for key, value in _test_profiles[0]['profile_options']['image']['choices']["tf"]["kubespawner_override"].items():
+    for key, value in _test_profiles[0]['profile_options']['cpu_limit']['choices']["one"]["kubespawner_override"].items():
         assert getattr(spawner, key) == value
 
 
