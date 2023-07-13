@@ -849,41 +849,11 @@ async def test_get_pod_manifest_tolerates_mixed_input():
     assert isinstance(manifest.spec.init_containers[0], V1Container)
     assert isinstance(manifest.spec.init_containers[1], V1Container)
 
-
 _test_profiles = [
-    {
-        'display_name': 'Training Env - Python',
-        'slug': 'training-python',
-        'default': True,
-        'kubespawner_override': {
-            'image': 'training/python:label',
-            'cpu_limit': 1,
-            'mem_limit': 512 * 1024 * 1024,
-            'environment': {'override': 'override-value'},
-        },
-    },
-    {
-        'display_name': 'Training Env - Datascience',
-        'slug': 'training-datascience',
-        'kubespawner_override': {
-            'image': 'training/datascience:label',
-            'cpu_limit': 4,
-            'mem_limit': 8 * 1024 * 1024 * 1024,
-        },
-    },
-    {
-        'display_name': 'Training Env - R',
-        'slug': 'training-r',
-        'kubespawner_override': {
-            'image': 'training/r:label',
-            'cpu_limit': 1,
-            'mem_limit': 512 * 1024 * 1024,
-            'environment': {'override': 'override-value', "to-remove": None},
-        },
-    },
     {
         'display_name': 'Test choices',
         'slug': 'test-choices',
+        'default': True,
         'profile_options': {
             'image': {
                 'display_name': 'Image',
@@ -935,6 +905,35 @@ _test_profiles = [
                     },
                 },
             },
+        },
+    },
+    {
+        'display_name': 'Training Env - Python',
+        'slug': 'training-python',
+        'kubespawner_override': {
+            'image': 'training/python:label',
+            'cpu_limit': 1,
+            'mem_limit': 512 * 1024 * 1024,
+            'environment': {'override': 'override-value'},
+        },
+    },
+    {
+        'display_name': 'Training Env - Datascience',
+        'slug': 'training-datascience',
+        'kubespawner_override': {
+            'image': 'training/datascience:label',
+            'cpu_limit': 4,
+            'mem_limit': 8 * 1024 * 1024 * 1024,
+        },
+    },
+    {
+        'display_name': 'Training Env - R',
+        'slug': 'training-r',
+        'kubespawner_override': {
+            'image': 'training/r:label',
+            'cpu_limit': 1,
+            'mem_limit': 512 * 1024 * 1024,
+            'environment': {'override': 'override-value', "to-remove": None},
         },
     },
 ]
