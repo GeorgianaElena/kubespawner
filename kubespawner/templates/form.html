@@ -10,7 +10,7 @@
                id="profile-item-{{ profile.slug }}"
                value="{{ profile.slug }}"
                {#- Mark the default profile as selected or the first one if none was explicitly set #}
-               {% if profile.default or loop.index == 1 %}checked{% endif %} />
+               {% if profile.default %}checked{% endif %} />
       </div>
       <div>
         <h3>{{ profile.display_name }}</h3>
