@@ -3179,7 +3179,7 @@ class KubeSpawner(Spawner):
         The default supported arguments are 'profile', and options for the
         selected profile defined as 'profile-option-{profile-slug}-{option-slug}'
 
-        Override in subclasses to support other options.
+        Override in subclasses to support other options..
         """
 
         if self._profile_list is None:
