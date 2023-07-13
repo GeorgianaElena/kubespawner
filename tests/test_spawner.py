@@ -1023,6 +1023,7 @@ async def test_user_options_set_from_form_invalid_regex():
             ],
         }
     )
+    # delete me
     assert spawner.user_options == {
         'image--unlisted-choice': 'invalid/foo:latest',
         'profile': _test_profiles[3]['slug'],
