@@ -854,26 +854,27 @@ _test_profiles = [
         'display_name': 'Training Env - Python',
         'slug': 'training-python',
         'default': True,
-        'profile_options': {
-            'cpu_limit': {
-                'display_name': 'CPU',
-                'unlisted_choice': {
-                    'enabled': False,
-                },
-                'choices': {
-                    'one': {
-                        'display_name': '1 CPU',
-                        'default': True,
-                        'kubespawner_override': {'cpu_limit': 1},
-                    },
-                    'two':{
-                        'display_name': '2 CPUs',
-                        'kubespawner_override': {'cpu_limit': 2},
-                    }
-                },
-            },
-        },
+        # 'profile_options': {
+        #     'cpu_limit': {
+        #         'display_name': 'CPU',
+        #         'unlisted_choice': {
+        #             'enabled': False,
+        #         },
+        #         'choices': {
+        #             'one': {
+        #                 'display_name': '1 CPU',
+        #                 'default': True,
+        #                 'kubespawner_override': {'cpu_limit': 1},
+        #             },
+        #             'two':{
+        #                 'display_name': '2 CPUs',
+        #                 'kubespawner_override': {'cpu_limit': 2},
+        #             }
+        #         },
+        #     },
+        # },
         'kubespawner_override': {
+            'cpu_limit': 1,
             'image': 'training/python:label',
             'mem_limit': 512 * 1024 * 1024,
             'environment': {'override': 'override-value'},
