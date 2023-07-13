@@ -851,9 +851,57 @@ async def test_get_pod_manifest_tolerates_mixed_input():
 
 _test_profiles = [
     {
+        'display_name': 'Training Env - Python',
+        'slug': 'training-python',
+        'default': True,
+        'profile_options': {
+            'image': {
+                'display_name': 'Image',
+                'unlisted_choice': {
+                    'enabled': True,
+                    'display_name': 'Image Location',
+                    'validation_regex': '^pangeo/.*$',
+                    'validation_message': 'Must be a pangeo image, matching ^pangeo/.*$',
+                    'kubespawner_override': {'image': '{value}'},
+                },
+                'choices': {
+                    'pytorch': {
+                        'display_name': 'Python 3 Training Notebook',
+                        'kubespawner_override': {
+                            'image': 'pangeo/pytorch-notebook:master'
+                        },
+                    },
+                    'tf': {
+                        'display_name': 'R 4.2 Training Notebook',
+                        'default': True,
+                        'kubespawner_override': {'image': 'training/r:label'},
+                    },
+                },
+            },
+        },
+    },
+    {
+        'display_name': 'Training Env - Datascience',
+        'slug': 'training-datascience',
+        'kubespawner_override': {
+            'image': 'training/datascience:label',
+            'cpu_limit': 4,
+            'mem_limit': 8 * 1024 * 1024 * 1024,
+        },
+    },
+    {
+        'display_name': 'Training Env - R',
+        'slug': 'training-r',
+        'kubespawner_override': {
+            'image': 'training/r:label',
+            'cpu_limit': 1,
+            'mem_limit': 512 * 1024 * 1024,
+            'environment': {'override': 'override-value', "to-remove": None},
+        },
+    },
+    {
         'display_name': 'Test choices',
         'slug': 'test-choices',
-        'default': True,
         'profile_options': {
             'image': {
                 'display_name': 'Image',
@@ -905,35 +953,6 @@ _test_profiles = [
                     },
                 },
             },
-        },
-    },
-    {
-        'display_name': 'Training Env - Python',
-        'slug': 'training-python',
-        'kubespawner_override': {
-            'image': 'training/python:label',
-            'cpu_limit': 1,
-            'mem_limit': 512 * 1024 * 1024,
-            'environment': {'override': 'override-value'},
-        },
-    },
-    {
-        'display_name': 'Training Env - Datascience',
-        'slug': 'training-datascience',
-        'kubespawner_override': {
-            'image': 'training/datascience:label',
-            'cpu_limit': 4,
-            'mem_limit': 8 * 1024 * 1024 * 1024,
-        },
-    },
-    {
-        'display_name': 'Training Env - R',
-        'slug': 'training-r',
-        'kubespawner_override': {
-            'image': 'training/r:label',
-            'cpu_limit': 1,
-            'mem_limit': 512 * 1024 * 1024,
-            'environment': {'override': 'override-value', "to-remove": None},
         },
     },
 ]
@@ -1040,7 +1059,6 @@ async def test_user_options_set_from_form_no_regex():
     spawner = KubeSpawner(_mock=True)
     spawner.profile_list = _test_profiles
     await spawner.get_options_form()
-    # print(_test_profiles[4])
     spawner.user_options = spawner.options_from_form(
         {
             'profile': [_test_profiles[4]['slug']],
@@ -1094,11 +1112,12 @@ async def test_user_options_api():
 async def test_default_profile():
     spawner = KubeSpawner(_mock=True)
     spawner.profile_list = _test_profiles
+    # default profile, default profile options
     spawner.user_options = {}
     # nothing should be loaded yet
     assert spawner.cpu_limit is None
     await spawner.load_user_options()
-    for key, value in _test_profiles[0]['kubespawner_override'].items():
+    for key, value in _test_profiles[0]['profile_options']['image']['choices']["tf"]["kubespawner_override"].items():
         assert getattr(spawner, key) == value
 
 
