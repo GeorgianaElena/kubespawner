@@ -3159,6 +3159,10 @@ class KubeSpawner(Spawner):
                     chosen_option_overrides = option['unlisted_choice'][
                         'kubespawner_override'
                     ]
+                    print(chosen_option_overrides)
+                    print(selected_profile_user_options[
+                        unlisted_choice_form_key
+                    ])
                     for k, v in chosen_option_overrides.items():
                         chosen_option_overrides[k] = v.format(
                             value=selected_profile_user_options[
