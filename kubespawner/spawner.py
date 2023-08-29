@@ -2942,7 +2942,7 @@ class KubeSpawner(Spawner):
         return []
 
     def _render_options_form(self, profile_list):
-        self.log.debug(f"[_render_options_form] self.profile_list that we do not wish to modify {self.profile_list}")
+        self.log.debug(f"[_render_options_form] self.profile_list that we do not wish to modify {self.profile_list.items()}")
 
         profile_list = self._populate_profile_list_defaults(profile_list)
 
@@ -2975,7 +2975,7 @@ class KubeSpawner(Spawner):
             '' when no `profile_list` has been defined
             The rendered template (using jinja2) when `profile_list` is defined.
         """
-        self.log.debug(f"[_options_form_default] self.profile_list that we do not wish to modify {self.profile_list}")
+        self.log.debug(f"[_options_form_default] self.profile_list that we do not wish to modify {self.profile_list.items()}")
         profile_list = copy.deepcopy(self.profile_list)
 
         if not profile_list:
@@ -3245,7 +3245,7 @@ class KubeSpawner(Spawner):
         Override in subclasses to support other options.
         """
 
-        self.log.debug(f"[load_user_options] self.profile_list that we do not wish to modify {self.profile_list}")
+        self.log.debug(f"[load_user_options] self.profile_list that we do not wish to modify {self.profile_list.items()}")
 
         if callable(self.profile_list):
             profile_list = await maybe_future(self.profile_list(self))
