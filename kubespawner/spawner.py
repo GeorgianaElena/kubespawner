@@ -2942,8 +2942,6 @@ class KubeSpawner(Spawner):
         return []
 
     def _render_options_form(self, profile_list):
-        print(f"[_render_options_form] self.profile_list that we do not wish to modify {self.profile_list}")
-
         profile_list = self._populate_profile_list_defaults(profile_list)
 
         loader = ChoiceLoader(
@@ -2975,18 +2973,15 @@ class KubeSpawner(Spawner):
             '' when no `profile_list` has been defined
             The rendered template (using jinja2) when `profile_list` is defined.
         """
-        print(f"[_options_form_default] self.profile_list that we do not wish to modify {self.profile_list}")
-        profile_list = copy.deepcopy(self.profile_list)
-
-        if not profile_list:
+        if not self.profile_list:
             return ''
-        if callable(profile_list):
+        if callable(self.profile_list):
             # Return the function dynamically, so JupyterHub will call this when the
             # form needs rendering
             return self._render_options_form_dynamically
         else:
             # Return the rendered string, as it does not change
-            return self._render_options_form(profile_list)
+            return self._render_options_form(self.profile_list)
 
     @default('options_from_form')
     def _options_from_form_default(self):
@@ -3244,11 +3239,9 @@ class KubeSpawner(Spawner):
 
         Override in subclasses to support other options.
         """
-
-        print(f"[load_user_options] self.profile_list that we do not wish to modify {self.profile_list}")
-
         if callable(self.profile_list):
-            profile_list = await maybe_future(self.profile_list(self))
+            profile_list = copy.deepcopy(self.profile_list)
+            profile_list = await maybe_future(profile_list)
         else:
             # Use a copy of the self.profile_list dict,
             # otherwise we might unintentionally modify it
