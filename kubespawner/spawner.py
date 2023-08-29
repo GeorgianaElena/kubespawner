@@ -3105,6 +3105,7 @@ class KubeSpawner(Spawner):
         existing value (rather than replaced). Callables are called with
         one parameter - the current spawner instance.
         """
+        self.log.debug(f"_apply_overrides {spawner_override.items()}")
         for k, v in spawner_override.items():
             if callable(v):
                 v = v(self)
@@ -3173,6 +3174,10 @@ class KubeSpawner(Spawner):
                     chosen_option_overrides = option['choices'][chosen_option][
                         'kubespawner_override'
                     ]
+
+                self.log.debug(
+                    f"Applying KubeSpawner override for {chosen_option} with chosen_option_overrides {chosen_option_overrides.items()} "
+                )
                 await self._apply_overrides(chosen_option_overrides)
 
     # set of recognised user option keys
